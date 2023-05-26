@@ -34,11 +34,12 @@ public class TestTriangle {
     }
 
     @Test
-    public void testInvalidInputZero() {
+    public void testInvalidInputZeroValueC() {
         assertThrows(InputMismatchException.class, () -> {
             triangleCalculator.calculateSquare(5, 55, 0);
         });
-    }
+    } // данный тест проверяет возникновение ошибки при введении стороны равной 0.
+    // данный треугольник не должен иметь площади и ожидается возникновение эксепшн
 
     @Test
     public void testNegativeInputValueA() {
@@ -49,10 +50,15 @@ public class TestTriangle {
 
     @Test
     public void testNegativeInputValueB() {
-        assertThrows(InputMismatchException.class, () -> {
-            triangleCalculator.calculateSquare(5, -5, 6);
+        assertFalse(() -> {
+            try {
+                triangleCalculator.calculateSquare(5, -4, 5);
+                return true;
+            } catch (InputMismatchException e) {
+                return false;
+            }
         });
-    } //данный тест проверяет возникновение ошибки при введении b < 0;
+    } //данный тест проверяет возникновение ошибки при введении b < 0; и использовано assertFalse
 
     @Test
     public void testNegativeInputValueC() {
@@ -64,9 +70,42 @@ public class TestTriangle {
     @Test
     public void testStringInput() {
         Double triangle = triangleCalculator.calculateSquare("5", "10", "8");
-        assertNotNull(triangle);
+        assertTrue(triangle > 0);
     } //тест проверяет возможность считывания чисел для формулы при введении строкового значения
 
+    @Test
+    public void testDoubleInput() {
+        Double triangle = triangleCalculator.calculateSquare(2.22, 5.569, 4.0);
+        assertTrue(triangle > 0);
+    } //тест проверяет возможность считывания чисел для формулы при введении строкового значения
+
+    @Test
+    public void testInvalidInputEmptyStrings() {
+        assertThrows(NumberFormatException.class, () -> {
+            triangleCalculator.calculateSquare(" ", " ", " ");
+        });
+    }
+
+    @Test
+    public void test() {
+        assertFalse(() -> {
+            try {
+                triangleCalculator.calculateSquare(4.0, 4.0, 10.0);
+                return false;
+            } catch (InputMismatchException e) {
+                return true;
+            }
+        });
+    }
+
+    @Test
+    public void testCalculateResult() {
+        Double expected = 24.0;
+        Double actual = triangleCalculator.calculateSquare(6.0, 8.0, 10.0);
+        assertEquals(expected, actual);
+    }
+}
 
 }
+
 
